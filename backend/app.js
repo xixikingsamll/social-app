@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 // 配置解析token的中间件
 const expressJWT = require('express-jwt')
 const config = require('./config')
-app.use(expressJWT.expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256'], }).unless({ path: [/^\/api\//] }))  
+app.use(expressJWT.expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256'], }).unless({ path: [/^\/api\//] }))
 
 // 导入路由模块
 const userRouter = require('./router/user')
@@ -53,6 +53,6 @@ app.use((err, req, res, next) => {
 })
 
 // 指定端口号并启动服务器
-app.listen(3007, () => {        
+app.listen(3007, () => {
     console.log('服务器已启动，端口号为3007')
 })

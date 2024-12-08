@@ -12,6 +12,7 @@ const config = require('../config')
 exports.register = (req, res) => {
     // 获取用户提交的数据
     const userinfo = req.body
+    console.log(userinfo)
 
     // 查询数据库中是否已有该用户名
     const sqlSearchUsername = `select * from user where username=?`
@@ -30,7 +31,7 @@ exports.register = (req, res) => {
         const sqlInsertUser = `insert into user set ?`
         db.query(sqlInsertUser, userinfo, (err, results) => {
             if (err) {
-                return res.cc(err)  
+                return res.cc(err)
             }
             if (results.affectedRows !== 1) {
                 return res.cc('注册失败')
@@ -54,15 +55,15 @@ exports.login = (req, res) => {
         if (results.length !== 1) {
             return res.cc('用户不存在')
         }
-        
+
         // 判断密码是否正确
         if (!bcrypt.compareSync(userinfo.password, results[0].password)) {
             return res.cc('密码错误')
         }
 
         // 生成token
-        const user = { ...results[0], password:'', avartar:'' }
-        const tokenStr = jwt.sign(user, config.jwtSecretKey, {expiresIn: config.expiresIn})
+        const user = { ...results[0], password: '', avartar: '' }
+        const tokenStr = jwt.sign(user, config.jwtSecretKey, { expiresIn: config.expiresIn })
         res.send({
             status: 0,
             message: '登录成功',
