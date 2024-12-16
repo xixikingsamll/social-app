@@ -13,24 +13,20 @@ cd backend  // 进入后端目录
 nodemon app  // 启动项目
 ```
 
+## 连接云端 MYSQL
 
-
-## 连接本地MYSQL
-
-在db.js目录下的index.js文件，里面配置了链接数据库的信息
+在 db.js 目录下的 index.js 文件，里面配置了链接数据库的信息
 
 ```js
-const mysql = require('mysql2')
+const mysql = require("mysql2");
 
-// 到时需将这些信息改为自己的
-const db = mysql.createPool({ 
-    host: 'localhost',   // 定位到本地
-    user: 'root',   // 用户名
-    password: '123456',  // 密码
-    database: 'nodejs'   // 数据库名
-})
+// 感谢松杰同学提供的云端数据库
+const db = mysql.createPool({
+  host: "150.158.190.85",
+  user: "admin",
+  password: "12345678",
+  database: "test",
+});
 
 module.exports = db;
 ```
-
-目前数据库暂时不支持迁移，请自己在本地创建需要用到的数据表，我后续想想怎么添加迁移功能
