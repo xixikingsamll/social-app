@@ -1,28 +1,11 @@
 const mysql = require('mysql2')
 
+// 感谢松杰同学提供的云端数据库
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'nodejs'
+    host: '150.158.190.85',
+    user: 'admin',
+    password: '12345678',
+    database: 'test'
 })
-
-// 开发人员1
-// const db = mysql.createPool({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '123456',
-//     database: 'nodejs'
-// })
-
-// 开发人员2
-// const db = mysql.createPool({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '123456',
-//     database: 'nodejs'
-// })
-
-
 
 module.exports = db;
