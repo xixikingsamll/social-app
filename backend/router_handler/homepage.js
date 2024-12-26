@@ -56,8 +56,7 @@ exports.homepage=async(req,res)=>{
 
 exports.createChat = async (req, res) => {
   try {
-      const { userIds, title } = req.body;  // 从请求体中获取 userIds 和 title
-      console.log(userIds, title);  // 打印用户ID和标题以便调试
+      const { userIds, title } = req.body;  
 
       // 检查 userIds 是否为两个有效的用户ID数组
       if (!userIds || !Array.isArray(userIds) || userIds.length !== 2) {

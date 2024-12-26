@@ -23,10 +23,10 @@ wss.on('connection', (ws) => {
                 connectedClients.set(userId, ws);
                 console.log(`用户 ${userId} 已订阅`);
             } else {
-                // 如果用户已经连接，发送提示
+                // 如果用户已经连接
                 console.log(`用户 ${userId} 已经订阅过了`);
             }
-            return;  // 处理完订阅请求，退出
+            return;
         }
 
         // 处理发送消息
