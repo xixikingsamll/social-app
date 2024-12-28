@@ -1,4 +1,4 @@
-const db = require('./db'); // 引入数据库连接池模块
+const db = require('../../backend/db/index');  // 引入数据库连接池模块
 
 /**
  * 点赞表数据库操作模块
@@ -17,7 +17,7 @@ const db = require('./db'); // 引入数据库连接池模块
  */
 async function insertLike(newLike) {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO like SET ?', newLike, (err, results) => {
+        db.query('INSERT INTO `like` SET ?', newLike, (err, results) => {
             if (err) {
                 console.error('插入点赞数据失败:', err);
                 return reject(err);  // 若插入失败，拒绝Promise
@@ -35,7 +35,7 @@ async function insertLike(newLike) {
  */
 async function deleteLike(likeId) {
     return new Promise((resolve, reject) => {
-        db.query('DELETE FROM like WHERE like_id = ?', [likeId], (err, results) => {
+        db.query('DELETE FROM `like` WHERE like_id = ?', [likeId], (err, results) => {
             if (err) {
                 console.error('删除点赞数据失败:', err);
                 return reject(err);  // 若删除失败，拒绝Promise
@@ -53,7 +53,7 @@ async function deleteLike(likeId) {
  */
 async function queryLike(likeId) {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM like WHERE like_id = ?', [likeId], (err, results) => {
+        db.query('SELECT * FROM `like` WHERE like_id = ?', [likeId], (err, results) => {
             if (err) {
                 console.error('查询点赞数据失败:', err);
                 return reject(err);  // 若查询失败，拒绝Promise
@@ -73,7 +73,7 @@ async function queryLike(likeId) {
  */
 async function queryAllLikes() {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM like', (err, results) => {
+        db.query('SELECT * FROM `like`', (err, results) => {
             if (err) {
                 console.error('查询所有点赞数据失败:', err);
                 return reject(err);  // 若查询失败，拒绝Promise

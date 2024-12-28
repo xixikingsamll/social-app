@@ -21,8 +21,7 @@ exports.homepage=async(req,res)=>{
         }
 
         const userInfo=userResults[0];
-        
-        db.query('SELECT * FROM post where user_id=?',[userId], (err, postResults) => {
+        db.query('SELECT post_id, title, created_at FROM post where user_id=?',[userId], (err, postResults) => {
             if (err) {
               return res.status(500).json({
                 success: false,
@@ -30,21 +29,18 @@ exports.homepage=async(req,res)=>{
                 error: err.message,
               });
             }
-          
             res.status(200).json({
               success: true,
               data: {
                 user: {
                   id: userInfo.user_id,
                   username: userInfo.username,
-                  avatar: userInfo.user_avatar,
+                  avatar: userInfo.avatar,
                 },
-                posts: postResults,
+                posts:postResults,
               },
             });
           });
-          
-
     }catch{
         console.error('Error fetching community posts:', error);
         res.status(500).json({
@@ -76,7 +72,14 @@ exports.createChat = async (req, res) => {
               message: '一个或多个用户信息未找到',
           });
       }
-
+      const chatIdResults=await queryAll('SELECT chat_id FROM chat_user WHERE user_id IN (?, ?) GROUP BY chat_id HAVING COUNT(DISTINCT user_id) = 2;',[userId1, userId2]);
+      console.log(chatIdResults);
+      if(chatIdResults.length){
+        return res.status(400).json({
+            success: false,
+            message: '已经有了',
+        });
+      }
       // 如果没有传入title，自动设置为对方的用户名
       const titleAuto = title || userResults.find(user => user.user_id !== userId1).username;
 

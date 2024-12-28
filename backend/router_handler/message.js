@@ -44,7 +44,7 @@ exports.getMessage = async (req, res) => {
             const otherUserInfo = otherUserResults[0];
 
             // 查找最近一条聊天记录
-            const sqlGetLastMessage = 'SELECT content, send_at FROM message WHERE chat_id = ? ORDER BY send_at DESC LIMIT 1';
+            const sqlGetLastMessage = 'SELECT content, sent_at FROM message WHERE chat_id = ? ORDER BY sent_at DESC LIMIT 1';
             const lastMessageResult=await queryAll(sqlGetLastMessage,chatId)
 
             const lastMessage = lastMessageResult.length > 0 ? lastMessageResult[0] : null;
@@ -59,7 +59,7 @@ exports.getMessage = async (req, res) => {
                 },
                 last_message: lastMessage ? {
                     content: lastMessage.content,
-                    send_at: lastMessage.send_at
+                    sent_at: lastMessage.sent_at
                 } : null
             });
         }

@@ -4,8 +4,8 @@ const WebSocket = require('ws');
 // 用于保存所有已连接的客户端
 const connectedClients = new Map();
 
-const wss = new WebSocket.Server({ port: 8081 }, () => {
-    console.log('WebSocket 服务器已启动，监听端口 8081');
+const wss = new WebSocket.Server({ port: 8082 }, () => {
+    console.log('WebSocket 服务器已启动，监听端口 8082');
 });
 
 wss.on('connection', (ws) => {
@@ -34,7 +34,6 @@ wss.on('connection', (ws) => {
             const { chatId, userId, content } = message;
             const sentAt = new Date();
 
-            // 调用消息服务保存消息
             await saveMessage(chatId, userId, content, sentAt);
 
             // 获取该聊天的所有用户
@@ -56,7 +55,6 @@ wss.on('connection', (ws) => {
         }
     });
 
-    // 监听连接关闭
     ws.on('close', () => {
         connectedClients.forEach((client, userId) => {
             if (client === ws) {

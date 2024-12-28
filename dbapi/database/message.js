@@ -1,4 +1,4 @@
-const db = require('./db'); // 引入数据库连接池模块
+const db = require('../../backend/db/index');  // 引入数据库连接池模块
 
 /**
  * 消息表数据库操作模块
