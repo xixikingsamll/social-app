@@ -59,3 +59,52 @@ exports.updateAvatar = (req, res) => {
         res.cc('更新头像成功', 0)
     })
 }
+
+exports.requestModifyPermission = async (req, res) => {
+    try {
+        const { id } = req.body; // 获取请求体中的用户ID
+
+        // 校验用户ID
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: '用户ID不能为空'
+            });
+        }
+
+        // 查询用户是否存在
+        const userQuery = 'SELECT * FROM user WHERE user_id = ?'; // 查询用户是否存在
+        const user = await queryAll(userQuery, [id]); 
+        if (user.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: '用户未找到'
+            });
+        }
+
+        // 返回成功响应
+        res.status(200).json({
+            success: true,
+            message: '获取修改权限成功'
+        });
+
+    } catch (error) {
+        console.error('获取修改权限失败:', error);
+        res.status(500).json({
+            success: false,
+            message: '服务器错误，请稍后重试'
+        });
+    }
+};
+
+async function queryAll(sql, params) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, params, (err, results) => {
+            if (err) {
+                console.error('SQL 查询出错:', err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+}
