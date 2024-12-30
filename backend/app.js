@@ -36,11 +36,31 @@ app.use(expressJWT.expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256
 // 导入路由模块
 const userRouter = require('./router/user')
 const userinfoRouter = require('./router/userinfo')
+<<<<<<< HEAD
+=======
+
+const communityRouter=require('./router/community')
+const homepageRouter=require('./router/homepage')
+const messageRouter=require('./router/message')
+const postRouter=require('./router/post')
+const chatRouter=require('./router/chat')
+
+>>>>>>> feature-update
 const adminLogin = require('./router/adminServer/login')
 const adminArticle = require('./router/adminServer/atricle')
 const adminCategory = require('./router/adminServer/category')
 app.use('/api', userRouter)
 app.use('/my', userinfoRouter)
+<<<<<<< HEAD
+=======
+
+app.use('/community',communityRouter)
+app.use('/homepage',homepageRouter)
+app.use('/message',messageRouter)
+app.use('/posts',postRouter)
+app.use('/chat',chatRouter)
+
+>>>>>>> feature-update
 app.use('/api/admin', adminLogin)
 app.use(adminArticle)
 app.use(adminCategory)

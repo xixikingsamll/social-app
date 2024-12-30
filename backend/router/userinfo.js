@@ -19,4 +19,12 @@ router.post('/updatepwd', expressJoi(update_password_schema), userinfo_handler.u
 // 换头像
 router.post('/update/avatar', expressJoi(update_avatar_schema), userinfo_handler.updateAvatar)
 
+//获取更改权限
+router.post('/updatepower', userinfo_handler.requestModifyPermission)
+
 module.exports = router
+
+
+
+
+

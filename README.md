@@ -24,9 +24,19 @@ const mysql = require("mysql2");
 const db = mysql.createPool({
   host: "150.158.190.85",
   user: "admin",
-  password: "",
+  password: "12345678",
   database: "test",
 });
 
 module.exports = db;
+```
+
+## 启动 websocket 服务器
+
+启动命令，在项目根目录处输入
+
+```bash
+cd backend  // 进入后端目录
+cd router_handler //进入启动项目文件的目录
+nodemon websocket  // 启动项目
 ```
