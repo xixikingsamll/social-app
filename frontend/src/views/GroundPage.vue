@@ -56,11 +56,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import UpdateCard from '@/components/UpdateCard.vue';
 import BasicInfoCard from '@/components/BasicInfoCard.vue';
+import { getPostsList } from '@/api';
+
+// todo 在这里写，写一个log打印就好了
+
+onMounted(async () => {
+  const { user_id } = JSON.parse(localStorage.getItem('userInfo'));
+  const res = await getPostsList({
+    id: user_id
+  });
+  console.log('渲染完成噢', res);
+  postLists.value = res.data.posts;
+});
 
 const value = ref('最新动态');
+const postLists = ref([]);
 const arr = ['12311', 'abc', '你哦'];
 const cards = [
   {
