@@ -16,6 +16,20 @@
 
 <script setup>
 import InformationCard from '@/components/InformationCard.vue';
+import { getInformationList } from '@/api';
+import { onMounted, ref } from 'vue';
+
+onMounted(async() => {
+  const informationList = ref([])
+  const {user_id}  = JSON.parse(localStorage.getItem('userInfo'))
+  const data = {
+    "id": user_id
+  }
+  await getInformationList(data).then((res) => {
+    informationList.value = res.data
+  })
+  console.log(informationList.value)
+})
 </script>
 
 <style scoped>

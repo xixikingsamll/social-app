@@ -18,15 +18,15 @@ instance.interceptors.request.use(
     return config;
   },
   error => {
-    return Promise.reject(error);
+    return Promise.reject(new Error(error));
   }
 );
 
 // 响应拦截器，可用于处理响应的统一逻辑，比如对错误状态码进行处理
 instance.interceptors.response.use(
   response => {
-    console.log('from http: ',response);
-    
+    console.log('from http: ', response);
+
     return response.data; // 通常返回响应中的数据部分，具体根据后端接口返回格式来定
   },
   error => {
@@ -35,7 +35,7 @@ instance.interceptors.response.use(
       // 比如401错误，可能是token过期，进行相应操作，如跳转到登录页等
       console.log('Token expired, please login again');
     }
-    return Promise.reject(error);
+    return Promise.reject(new Error(error));
   }
 );
 
