@@ -28,7 +28,7 @@ const routes = [
     name: 'ground',
     component: () => import('@/views/GroundPage.vue')
   },
-    {
+  {
     path: '/detail',
     name: 'detail',
     component: () => import('@/views/UpdateDetail.vue')
@@ -39,7 +39,7 @@ const routes = [
     component: () => import('@/views/PersonalPage.vue')
   },
   {
-    path: '/chat',
+    path: '/chat/:id',
     name: 'chat',
     component: () => import('@/views/ChatPage.vue')
   },

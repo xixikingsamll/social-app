@@ -6,8 +6,8 @@
         :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
       />
       <div>
-        <h3>用户aaa</h3>
-        <p>上次回复在2:55 pm</p>
+        <h3>{{ props.userInfo.username }}</h3>
+        <p>上次更新在 {{ format(new Date(), 'yyyy-MM-dd HH:mm:ss') }}</p>
       </div>
     </div>
     <div class="right-box">
@@ -24,7 +24,13 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { defineProps } from 'vue';
+import { format } from 'date-fns';
+const props = defineProps({
+  userInfo: Object
+});
+</script>
 
 <style scoped>
 .chat-status-card {

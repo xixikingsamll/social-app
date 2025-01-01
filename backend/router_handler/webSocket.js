@@ -14,6 +14,8 @@ wss.on('connection', (ws) => {
     // 监听客户端发送的消息
     ws.on('message', async (data) => {
         const message = JSON.parse(data);
+        console.log('######', message);
+
 
         // 处理订阅请求，连接时用户需要发送订阅信息
         if (message.type === 'subscribe') {
@@ -28,10 +30,10 @@ wss.on('connection', (ws) => {
             }
             return;
         }
-
         // 处理发送消息
         if (message.type === 'send_message') {
             const { chatId, userId, content } = message;
+
             const sentAt = new Date();
 
             await saveMessage(chatId, userId, content, sentAt);
@@ -42,6 +44,7 @@ wss.on('connection', (ws) => {
             // 广播消息给所有聊天用户
             chatUsers.forEach((userId) => {
                 const client = connectedClients.get(userId);
+                console.log(`发送消息给用户 ${client}`);
                 if (client && client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({
                         type: 'new_message',

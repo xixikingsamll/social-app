@@ -11,7 +11,7 @@
     <el-menu-item index="/detail">详细</el-menu-item>
     <el-menu-item index="/information">消息</el-menu-item>
     <el-menu-item index="/personal">个人页</el-menu-item>
-    <el-menu-item index="/chat">聊天页</el-menu-item>
+    <!-- <el-menu-item index="/chat">聊天页</el-menu-item> -->
     <el-menu-item index="/upload">上传页</el-menu-item>
   </el-menu>
 </template>

@@ -2,22 +2,22 @@
   <div
     :class="[
       'bubble-outer-container',
-      sender === 'self' ? 'slef-bubble' : 'other-person-bubble'
+      props.sender === 'self' ? 'slef-bubble' : 'other-person-bubble'
     ]"
   >
     <div class="bubble-inner-container">
-      {{ content }}
+      {{ props.message }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { defineProps } from 'vue';
 // 定义props，接收sender参数
 const props = defineProps({
-  sender: String
+  sender: String,
+  message: String
 });
-const content = '黑鸦你好呀';
 </script>
 
 <style scoped>

@@ -6,10 +6,7 @@
     </div>
 
     <div>
-      <InformationCard />
-      <InformationCard />
-      <InformationCard />
-      <InformationCard />
+      <InformationCard v-for="item in informationList" :key="item.chat_id" :information="item"/>
     </div>
   </div>
 </template>
@@ -17,18 +14,17 @@
 <script setup>
 import InformationCard from '@/components/InformationCard.vue';
 import { getInformationList } from '@/api';
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive } from 'vue';
 
-onMounted(async() => {
-  const informationList = ref([])
-  const {user_id}  = JSON.parse(localStorage.getItem('userInfo'))
-  const data = {
-    "id": user_id
-  }
+const informationList = reactive([])
+
+onMounted(async () => {
+  const { user_id } = JSON.parse(localStorage.getItem('userInfo'))
+  const data = { "id": user_id }
+
   await getInformationList(data).then((res) => {
-    informationList.value = res.data
+    informationList.push(...res.data.chats)
   })
-  console.log(informationList.value)
 })
 </script>
 
