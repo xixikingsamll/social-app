@@ -50,7 +50,9 @@ import { ref, reactive } from 'vue';
 import { login } from '@/api';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex'; // 导入Vuex的useStore函数，用于获取store实例
 
+const store = useStore();
 const router = useRouter();
 // 定义表单数据
 const form = reactive({
@@ -136,6 +138,7 @@ const submitForm = () => {
       const res = await login(data);
       if (res.status === 0) {
         // 成功操作
+        store.dispatch('setLoginStatus', true);
         ElMessage({
           message: '登录成功！正在跳转页面...',
           type: 'success',

@@ -3,7 +3,7 @@
     <template #header>
       <div class="card-header">
         <div class="card-header-left">
-          <div class="avatar">
+          <div class="avatar" @click="gotoPersonDetail">
             <el-avatar
               :size="50"
               :src="
@@ -60,11 +60,19 @@ const props = defineProps({
   post: {
     type: Object,
     default: {}
+  },
+  clickAvatar: {
+    type: Function,
+    default: () => {}
   }
 });
 
 const gotoPost = () => {
   router.push(`/detail/${props.post.post_id}`);
+};
+
+const gotoPersonDetail = () => {
+  router.push(`/personal/${props.post.user_id}`);
 };
 
 // 使用 defineEmits 定义 emits

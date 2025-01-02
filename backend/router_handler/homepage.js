@@ -120,3 +120,46 @@ async function queryAll(sql, params) {
       });
   });
 }
+
+
+
+exports.getChatIdByUserIds = async (req, res) => {
+    try {
+        const { userIds } = req.body;
+        
+        // 检查 userIds 是否为两个有效的用户ID数组
+        if (!userIds ||!Array.isArray(userIds) || userIds.length!== 2) {
+            return res.status(400).json({
+                success: false,
+                message: '需要提供两个用户的ID数组',
+            });
+        }
+
+        const [userId1, userId2] = userIds;
+
+        // 查询是否存在这两个用户共同所在的聊天室的chat_id
+        const chatIdResults = await queryAll('SELECT chat_id FROM chat_user WHERE user_id IN (?,?) GROUP BY chat_id HAVING COUNT(DISTINCT user_id) = 2;', [userId1, userId2]);
+        if (chatIdResults.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: '未找到这两个用户对应的聊天室',
+            });
+        }
+
+        const chatId = chatIdResults[0].chat_id;
+
+        res.status(200).json({
+            success: true,
+            data: {
+                chatId,
+            },
+        });
+    } catch (error) {
+        console.error('Error getting chatId by userIds:', error);
+        res.status(500).json({
+            success: false,
+            message: '服务器错误',
+            error: error.message,
+        });
+    }
+};

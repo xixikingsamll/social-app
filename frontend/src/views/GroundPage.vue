@@ -22,7 +22,11 @@
     </el-col>
     <el-col class="person-information-layout" :span="6">
       <div class="person-top">
-        <BasicInfoCard :user="user" :clickAvatar="clickAvatar" />
+        <BasicInfoCard
+          :user="user"
+          :clickAvatar="clickAvatar"
+          :show-button="true"
+        />
       </div>
       <!-- <div class="person-bottom">
         <el-card class="person-bottom-card">
@@ -65,8 +69,9 @@ import { getPostsList } from '@/api';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const { user_id } = JSON.parse(localStorage.getItem('userInfo'));
+
 onMounted(async () => {
-  const { user_id } = JSON.parse(localStorage.getItem('userInfo'));
   const res = await getPostsList({
     id: user_id
   });
@@ -79,7 +84,7 @@ const postLists = ref([]);
 const user = ref({});
 
 const clickAvatar = () => {
-  router.push({ name: 'personal' });
+  router.push(`/personal/${user_id}`);
 };
 </script>
 

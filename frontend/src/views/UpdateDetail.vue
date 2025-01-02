@@ -1,6 +1,6 @@
 <template>
   <div class="detail-layout">
-    <BasicInfoCard :user="authorData" />
+    <BasicInfoCard :user="authorData" show-button="true" />
     <DynamicCard :post="postData" :author="authorData" />
     <div class="command-titile">评论区</div>
     <el-card class="command-input-form">
@@ -127,7 +127,7 @@ const submitCommentFn = async () => {
 
 <style scoped>
 .detail-layout {
-  padding: 0 10%;
+  padding: 20px 10%;
   display: flex;
   flex-direction: column;
   gap: 20px;

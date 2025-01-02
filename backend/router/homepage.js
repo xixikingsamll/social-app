@@ -8,5 +8,6 @@ router.post('/',  homepage_handler.homepage)
 
 router.post('/chat',homepage_handler.createChat)
 
+router.post('/getChatId',homepage_handler.getChatIdByUserIds)
 
 module.exports = router 

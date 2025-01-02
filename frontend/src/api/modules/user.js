@@ -35,8 +35,9 @@ export const updateUserInfo = (data) => {
   return response;
 };
 
-// export const getUserInfo = (data) => {
-//   const response = http.post('/homepage', data);
-//   return response;
-// };
+
+export const getPersonDetail = (data) => {
+  const response =  http.post('/homepage', data);
+  return response;
+};
 

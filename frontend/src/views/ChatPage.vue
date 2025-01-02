@@ -32,7 +32,8 @@
         </div>
       </div>
       <div
-        v-for="item in newMessageList"
+        v-for="(item, index) in newMessageList"
+        :key="index"
         :class="[
           item.userId === userId ? 'chat-self-history' : 'chat-other-history',
           'chat-history'

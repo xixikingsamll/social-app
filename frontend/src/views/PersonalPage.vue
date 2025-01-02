@@ -2,31 +2,37 @@
   <div class="container">
     <el-row class="info-row">
       <el-col :span="4">
-        <BasicInfoCard :user="userInfo" />
+        <BasicInfoCard :user="userInfo" :changeName="true" />
       </el-col>
       <el-col :span="18">
         <el-card class="info-card">
           <div class="info-item">
             <span class="info-label">用户名:</span>
-            <span class="info-value" @click="showDialog('username')">{{
-              userInfo.username
-            }}</span>
+            <span
+              class="info-value"
+              @click="ifEditable && showDialog('username')"
+              >{{ userInfo.username }}</span
+            >
           </div>
         </el-card>
         <el-card class="info-card">
           <div class="info-item">
             <span class="info-label">手机号:</span>
-            <span class="info-value" @click="showDialog('phone')">{{
-              userInfo.phone ? userInfo.phone : '未绑定'
-            }}</span>
+            <span
+              class="info-value"
+              @click="ifEditable && showDialog('phone')"
+              >{{ userInfo.phone ? userInfo.phone : '未绑定' }}</span
+            >
           </div>
         </el-card>
         <el-card class="info-card">
           <div class="info-item">
             <span class="info-label"> 邮 箱:</span>
-            <span class="info-value" @click="showDialog('email')">{{
-              userInfo.email ? userInfo.email : '未绑定'
-            }}</span>
+            <span
+              class="info-value"
+              @click="ifEditable && showDialog('email')"
+              >{{ userInfo.email ? userInfo.email : '未绑定' }}</span
+            >
           </div>
         </el-card>
       </el-col>
@@ -95,23 +101,34 @@ import UpdateCard from '@/components/UpdateCard.vue';
 import DynamicCard from '@/components/DynamicCard.vue';
 import { getUserInfo } from '@/api/modules/user';
 import { updateUserInfo } from '@/api/modules/user';
+import { getPersonDetail } from '@/api/index';
 import { ref, reactive, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const user_id = route.params.id;
 onMounted(async () => {
-  const user = JSON.parse(localStorage.getItem('userInfo'));
-  const userRes = await getUserInfo({ id: user.user_id });
-  console.log(userRes, 'user');
-  userInfo.value = user;
-  posts.value = userRes.posts;
+  const { user_id: user } = JSON.parse(localStorage.getItem('userInfo'));
+  const userRes2 = await getUserInfo({ id: user_id });
+  const userRes = await getPersonDetail({ id: user_id });
+  userInfo.value = userRes.data.user;
+  posts.value = userRes.data.posts;
+  console.log('userRes2', userRes2);
   // 初始化表单数据，将当前用户信息填充到表单中，方便用户修改
-  formData.value.username = userInfo.value.username;
-  formData.value.email = userInfo.value.email;
-  formData.value.id = userInfo.value.user_id;
+  if (user == user_id) {
+    console.log('进入？？');
+    const shabiUser = JSON.parse(localStorage.getItem('userInfo'));
+    ifEditable.value = true;
+    userInfo.value = { ...userInfo.value, ...shabiUser };
+    formData.value = { ...formData.value, ...shabiUser };
+  }
 });
 
 // 用于控制对话框显示隐藏
 const dialogShow = ref(false);
+// 控制是否可以修改
+const ifEditable = ref(false);
 // 存储表单数据
 const formData = ref({
   id: '',

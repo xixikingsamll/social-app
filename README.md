@@ -2,6 +2,18 @@
 
 一个类似狐友的聊天社交 web 网站
 
+## 前端启动项目
+
+后端架构：express （需要有 node.js 环境）
+
+启动命令，在项目根目录处输入
+
+```bash
+cd frontend  // 进入前端目录
+npm install // 下载依赖
+npm run serve  // 启动项目
+```
+
 ## 后端启动项目
 
 后端架构：express （需要有 node.js 环境）

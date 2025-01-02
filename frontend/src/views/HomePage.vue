@@ -9,13 +9,16 @@
 import { ref } from 'vue';
 import { login } from '@/api';
 import { useRouter } from 'vue-router';
+import { getChatId } from '@/api';
 
 const router = useRouter();
 
 const a = ref(0);
-const handleClick = () => {
-  console.log('asdas');
-  a.value++;
+const handleClick = async () => {
+  const res = await getChatId({
+    userIds: [9, 11]
+  });
+  console.log('获取id', res);
 };
 
 const data = {
