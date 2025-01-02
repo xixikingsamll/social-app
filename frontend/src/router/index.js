@@ -29,7 +29,7 @@ const routes = [
     component: () => import('@/views/GroundPage.vue')
   },
   {
-    path: '/detail',
+    path: '/detail/:id',
     name: 'detail',
     component: () => import('@/views/UpdateDetail.vue')
   },

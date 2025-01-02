@@ -6,12 +6,16 @@
           <div class="avatar">
             <el-avatar
               :size="50"
-              :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
+              :src="
+                post.user_avatar
+                  ? post.user_avatar
+                  : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+              "
             />
           </div>
           <div class="info">
-            <div class="info-name">AAAA</div>
-            <div class="info-status">5分钟之前</div>
+            <div class="info-name">{{ post.username }}</div>
+            <div class="info-status">{{ getTimeDiff(post.created_at) }}</div>
           </div>
         </div>
         <div class="card-header-right">
@@ -19,11 +23,11 @@
         </div>
       </div>
     </template>
-    <h3>主题1</h3>
-    <span v-for="o in 6" :key="o" class="text item">
+    <h3 @click="gotoPost">{{ post.title }}</h3>
+    <!-- <span v-for="o in 6" :key="o" class="text item">
       {{ 'List item ' + o }}
-    </span>
-    <template #footer>
+    </span> -->
+    <!-- <template #footer>
       <div class="card-footer">
         <div class="card-footer-tag">
           <el-tag type="info">Tag 1</el-tag>
@@ -42,16 +46,31 @@
           </div>
         </div>
       </div>
-    </template>
+    </template> -->
   </el-card>
 </template>
 
 <script setup>
-// import { ElCard, ElAvatar, ElIcon, ElTag } from 'element-plus';
-// import { MoreFilled, View, ChatSquare, Share } from '@element-plus/icons-vue';
+import { getTimeDiff } from '@/util';
+import { useRouter } from 'vue-router';
 
-// 这里可以定义组件接收的props，目前示例中暂未添加额外props，后续可按需扩展
-// 比如可以接收头像地址、用户名、发布时间等信息作为props来让组件更灵活
+const router = useRouter();
+
+const props = defineProps({
+  post: {
+    type: Object,
+    default: {}
+  }
+});
+
+const gotoPost = () => {
+  router.push(`/detail/${props.post.post_id}`);
+};
+
+// 使用 defineEmits 定义 emits
+// const emit = defineEmits(['clickButton']);
+
+// 计算属性，用于根据时间戳计算与当前时间的时间差并返回格式化后的字符串
 </script>
 
 <style scoped>

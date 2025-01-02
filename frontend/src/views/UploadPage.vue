@@ -1,28 +1,30 @@
 <template>
   <div class="container">
-    <form class="form">
+    <form class="form" @submit.prevent="handleSubmit">
       <div class="form-header">
-        <span class="form-title">主题</span>
-        <span class="selected-count">{{ selectedTags.length }} / 30</span>
+        <div class="form-title">主题</div>
+        <el-input
+          v-model="formData.title"
+          placeholder="请输入主题"
+          :rules="titleRules"
+        ></el-input>
       </div>
-      <el-select
-        v-model="selectedTags"
-        multiple
-        style="width: 100%; margin-bottom: 20px"
-      >
-        <el-option v-for="tag in tags" :key="tag" :label="tag">{{
-          tag
-        }}</el-option>
-      </el-select>
+
       <div class="form-item">
         <span class="form-label">内容</span>
-        <el-input placeholder="请输入内容" :rows="7" type="textarea"></el-input>
+        <el-input
+          v-model="formData.content"
+          placeholder="请输入内容"
+          :rows="7"
+          type="textarea"
+          :rules="contentRules"
+        ></el-input>
       </div>
       <div class="form-footer">
         <el-button type="primary">选择图片</el-button>
         <div>
-          <el-button type="info">保存草稿</el-button>
-          <el-button type="warning">发布</el-button>
+          <el-button type="info" @click="handleSaveDraft">保存草稿</el-button>
+          <el-button type="warning" @click="handlePublish">发布</el-button>
         </div>
       </div>
     </form>
@@ -30,42 +32,116 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
+import { sendPost } from '@/api';
+import dayjs from 'dayjs';
 
-// 模拟的主题标签列表，你可以替换为真实从接口获取的数据等
-const tags = [
-  '主题1',
-  '主题2',
-  '主题3',
-  '主题4',
-  '主题5',
-  '主题6',
-  '主题7',
-  '主题8',
-  '主题9',
-  '主题10',
-  '主题11',
-  '主题12',
-  '主题13',
-  '主题14',
-  '主题15',
-  '主题16',
-  '主题17',
-  '主题18',
-  '主题19',
-  '主题20',
-  '主题21',
-  '主题22',
-  '主题23',
-  '主题24',
-  '主题25',
-  '主题26',
-  '主题27',
-  '主题28',
-  '主题29',
-  '主题30'
-];
-const selectedTags = ref([]);
+onMounted(() => {
+  const draft = JSON.parse(localStorage.getItem('draft'));
+  if (draft) {
+    formData.value = draft;
+  }
+});
+
+// 存储表单数据
+const formData = ref({
+  title: '',
+  content: ''
+});
+
+// 主题的表单验证规则
+const titleRules = reactive([
+  { required: true, message: '主题不能为空', trigger: 'blur' }
+  // 可根据实际需求添加更多验证规则，比如长度限制等
+]);
+
+// 内容的表单验证规则
+const contentRules = reactive([
+  { required: true, message: '主题不能为空', trigger: 'blur' }
+  // 可根据实际需求添加更多验证规则，比如长度限制等
+]);
+
+const handleSaveDraft = () => {
+  try {
+    const validateResult = validateForm();
+    if (validateResult) {
+      localStorage.setItem('draft', JSON.stringify(formData.value));
+      ElMessage({
+        message: '草稿保存成功',
+        type: 'success',
+        duration: 1000
+      });
+    } else {
+      ElMessage({
+        message: '保存草稿时表单验证失败，请检查输入内容',
+        type: 'error',
+        duration: 1000
+      });
+    }
+  } catch (error) {
+    console.error('保存草稿时出现错误：', error);
+    ElMessage({
+      message: '保存草稿时出现错误，请检查输入内容',
+      duration: 1000
+    });
+  }
+};
+
+const handlePublish = async () => {
+  try {
+    await validateForm();
+    const { user_id } = JSON.parse(localStorage.getItem('userInfo'));
+    const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    console.log('timestamp', timestamp);
+
+    const res = await sendPost({
+      id: user_id,
+      timestamp,
+      ...formData.value
+    });
+    if (res.success) {
+      ElMessage({
+        message: `${res.message}`,
+        type: 'success',
+        duration: 2000
+      });
+      // 发布成功后可根据需求清空表单数据，方便下次发布
+      formData.value.title = '';
+      formData.value.content = '';
+    } else {
+      ElMessage({
+        message: `发布失败：${res.message}`,
+        type: 'error',
+        duration: 2000
+      });
+    }
+  } catch (error) {
+    console.error('发布时表单验证失败或出现其他错误：');
+    ElMessage({
+      message: '发布时出现错误，请检查输入内容',
+      type: 'error',
+      duration: 2000
+    });
+  }
+};
+
+const validateForm = () => {
+  return new Promise((resolve, reject) => {
+    // 获取表单实例，这里假设表单的ref名为form
+    const form = document.querySelector('form');
+    if (form.checkValidity()) {
+      resolve(true);
+    } else {
+      form.reportValidity();
+      resolve(false);
+    }
+  });
+};
+
+const handleSubmit = async (e) => {
+  await handlePublish();
+};
 </script>
 
 <style scoped>
@@ -85,7 +161,7 @@ const selectedTags = ref([]);
 }
 
 .form-header {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
@@ -93,6 +169,7 @@ const selectedTags = ref([]);
 
 .form-title {
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .selected-count {

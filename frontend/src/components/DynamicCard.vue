@@ -7,8 +7,10 @@
           :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
         />
         <div class="card-top-info">
-          <div class="card-top-info-name">{{ username }}</div>
-          <div class="card-top-info-time">{{ postDate }}</div>
+          <div class="card-top-info-name">{{ author.username }}</div>
+          <div class="card-top-info-time">
+            {{ getTimeDiff(post.timestamp) }}
+          </div>
         </div>
       </div>
       <div class="card-top-right">
@@ -16,19 +18,20 @@
       </div>
     </div>
     <div class="card-content">
-      <p class="card-text">{{ content }}</p>
+      <h3>{{ post.title }}</h3>
+      <p class="card-text">{{ post.content }}</p>
     </div>
     <el-divider />
     <div class="card-bottom">
       <div class="card-bottom-left">
-        <div class="dianzan icon-button">
+        <div class="dianzan icon-button" @click="handleLikes">
           <img src="../assets/dianzan.png" alt="赞" class="thumb-icon" />
-          <span class="like-count">{{ likeCount }}</span>
+          <span class="like-count">{{ post.likes }}</span>
         </div>
-        <div class="diancai icon-button">
+        <!-- <div class="diancai icon-button">
           <img src="../assets/diancai.png" alt="踩" class="thumb-icon" />
           <span class="dislike-count">{{ dislikeCount }}</span>
-        </div>
+        </div> -->
       </div>
       <div class="card-bottom-right">
         <div class="icon-button">
@@ -45,13 +48,54 @@
 </template>
 
 <script setup>
-const avatar =
-  'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
-const postDate = '2024-12-25 10:00';
-const username = '@limingye';
-const content = '这是一条动态评论内容，这里可以写很多内容来展示。';
-const likeCount = 10;
-const dislikeCount = 5;
+import { getTimeDiff } from '@/util';
+import { likePost } from '@/api';
+import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
+
+const props = defineProps({
+  post: {
+    type: Object,
+    default: {}
+  },
+  author: {
+    type: Object,
+    default: {}
+  }
+});
+
+const isLiked = ref(false);
+
+const handleLikes = async () => {
+  // 如果未点赞，调用点赞接口
+  try {
+    const { user_id } = JSON.parse(localStorage.getItem('userInfo'));
+    const res = await likePost({
+      id: user_id,
+      postid: props.post.id
+    }); // 假设接口需要传入文章ID，根据实际调整
+    if (res.success) {
+      ElMessage({
+        message: '点赞成功',
+        type: 'success'
+      });
+      window.location.reload();
+      // post.value.likes++; // 点赞数加1
+      // isLiked.value = true; // 更新点赞状态
+    } else {
+      ElMessage({
+        message: `点赞失败：${res.message}`,
+        type: 'error'
+      });
+    }
+  } catch (error) {
+    console.log('点赞时出现错误：', error);
+    ElMessage({
+      message: `点赞失败：你已经点赞过啦`,
+      type: 'error'
+    });
+  }
+};
 </script>
 
 <style scoped>

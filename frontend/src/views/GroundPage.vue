@@ -13,16 +13,18 @@
         </el-segmented>
       </div>
       <div class="content-main">
-        <UpdateCard />
-        <UpdateCard />
-        <UpdateCard />
+        <UpdateCard
+          v-for="(item, index) in postLists"
+          :key="index"
+          :post="item"
+        />
       </div>
     </el-col>
     <el-col class="person-information-layout" :span="6">
       <div class="person-top">
-        <BasicInfoCard />
+        <BasicInfoCard :user="user" :clickAvatar="clickAvatar" />
       </div>
-      <div class="person-bottom">
+      <!-- <div class="person-bottom">
         <el-card class="person-bottom-card">
           <div class="person-comment">
             <div class="person-comment-username">
@@ -50,7 +52,7 @@
             </div>
           </div>
         </el-card>
-      </div>
+      </div> -->
     </el-col>
   </el-row>
 </template>
@@ -60,51 +62,25 @@ import { ref, onMounted } from 'vue';
 import UpdateCard from '@/components/UpdateCard.vue';
 import BasicInfoCard from '@/components/BasicInfoCard.vue';
 import { getPostsList } from '@/api';
+import { useRouter } from 'vue-router';
 
-// todo 在这里写，写一个log打印就好了
-
+const router = useRouter();
 onMounted(async () => {
   const { user_id } = JSON.parse(localStorage.getItem('userInfo'));
   const res = await getPostsList({
     id: user_id
   });
-  console.log('渲染完成噢', res);
   postLists.value = res.data.posts;
+  user.value = res.data.user;
 });
 
 const value = ref('最新动态');
 const postLists = ref([]);
-const arr = ['12311', 'abc', '你哦'];
-const cards = [
-  {
-    avatar: 'https://example.com/avatar1.jpg',
-    username: '用户1',
-    lastOnline: '10分钟前',
-    title: '这是一个帖子标题1',
-    content: '这是帖子内容1，随便写一些示例内容用来展示效果。',
-    tags: ['标签1', '标签2'],
-    comments: 10,
-    shares: 5
-  },
-  {
-    avatar: 'https://example.com/avatar2.jpg',
-    username: '用户2',
-    lastOnline: '20分钟前',
-    title: '这是一个帖子标题2',
-    content: '这是帖子内容2，继续填充示例内容展示样式。',
-    tags: ['标签3', '标签4'],
-    comments: 8,
-    shares: 3
-  }
-];
+const user = ref({});
 
-// 分段控制器选项
-const tabOptions = [
-  { label: '最新动态', icon: 'el-icon-time', value: '最新动态' },
-  { label: '最近流行', icon: 'el-icon-star-on', value: '最近流行' },
-  { label: '热度最高', icon: 'el-icon-fire', value: '热度最高' },
-  { label: '最新发布', icon: 'el-icon-edit', value: '最新发布' }
-];
+const clickAvatar = () => {
+  router.push({ name: 'personal' });
+};
 </script>
 
 <style scoped>

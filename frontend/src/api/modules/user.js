@@ -19,3 +19,24 @@ export const register = (data) => {
   return response;
 };
 
+export const getUserInfo =async (data) => {
+  const basicInfo =await http.get('/my/userinfo', data);
+  const posts = await http.post('/homepage', data);
+  
+  const res = {
+    ...basicInfo.data,
+    posts:posts.data.posts
+  }
+  return res;
+};
+
+export const updateUserInfo = (data) => {
+  const response = http.get('/my/userinfo', data);
+  return response;
+};
+
+// export const getUserInfo = (data) => {
+//   const response = http.post('/homepage', data);
+//   return response;
+// };
+
