@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 const expressJWT = require('express-jwt')
 const config = require('./config')
 app.use(expressJWT.expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256'], }).unless({ path: [/^\/api\//] }))
+app.use(expressJWT.expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256'], }).unless({ path: [/^\/my\//] }))
 
 // 导入路由模块
 const userRouter = require('./router/user')
